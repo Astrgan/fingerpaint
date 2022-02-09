@@ -1,0 +1,106 @@
+var drawing = false;
+var context;
+
+window.onload=function()
+{
+    
+    //Back Button
+    document.getElementById('btnBack').addEventListener('click', function(){
+            document.getElementById('myCanvas').style.display = "block";
+            document.getElementById('saveArea').style.display = "none";
+            document.getElementById('tools').style.display = "block";
+            
+        }, false);
+
+    document.getElementById('btn-group').addEventListener('click', function (e) {
+        switch (e.target.getAttribute('data-element')) {
+            case 'red':
+                console.log('red');
+                context.strokeStyle = 'red';
+                document.getElementById('cursor').style.backgroundColor = 'red';
+                break;
+            case 'yellow':
+                console.log('yellow');
+                context.strokeStyle = 'yellow';
+                document.getElementById('cursor').style.backgroundColor = 'yellow';
+                break;
+            case 'blue':
+                console.log('blue');
+                context.strokeStyle = 'blue';
+                document.getElementById('cursor').style.backgroundColor = 'blue';
+                break;
+        }
+    }, false);
+
+    /*
+        //Save
+       /* document.getElementById('btnSave').addEventListener('click', function(){
+                document.getElementById('myCanvas').style.display = "none";
+                document.getElementById('saveArea').style.display = "block";
+                document.getElementById('tools').style.display = "none";
+
+                var dataURL = document.getElementById('myCanvas').toDataURL();
+                document.getElementById('canvasImg').src = dataURL;
+            }, false);*/
+    
+    //Size Canvas
+    context = document.getElementById('myCanvas').getContext("2d");
+    context.canvas.width = window.innerWidth;
+    context.canvas.height = window.innerHeight-60;
+    
+    //Mouse movement
+    document.onmousemove = handleMouseMove;
+    document.onmousedown = handleDown;
+    document.onmouseup = handleUp;
+    
+    //Style line
+    context.strokeStyle = "yellow";
+    context.lineJoin = "round";
+    let radPoint = 15;
+    context.lineWidth = radPoint;
+    
+    //Hide Save Area
+    document.getElementById('saveArea').style.display = "none";
+
+    let background = new Image();
+    background.src = "./img/duck.jpg";
+
+    background.onload = function(){
+        context.canvas.getContext("2d").drawImage(background,0,0);
+    }
+}
+
+
+
+function handleMouseMove(e)
+{
+    // console.log(e.clientX);
+    // console.log(e.clientY);
+    let clientX = e.clientX+10;
+    let clientY = e.clientY+10;
+    if(drawing)
+    {
+        context.lineTo(clientX, clientY);
+        context.closePath();
+        context.stroke();
+        context.moveTo(clientX, clientY);
+    } else
+    {
+        context.moveTo(clientX, clientY);
+    }
+}
+
+function handleDown(e)
+{
+    drawing = !drawing; 
+    console.log(drawing);
+    context.moveTo(e.clientX, e.clientY);
+    context.beginPath();
+    console.log('presMouse')
+}
+
+function handleUp()
+{
+    drawing = !drawing;
+    console.log(drawing);
+}

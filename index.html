@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <title>Fingerpaint</title>
+        <script type="text/javascript" src="fingerpaint.js"></script>
+        <script type="text/javascript" src="mouseDate.js"></script>
+        <script src="bootstrap.bundle.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="fingerpaint.css"/>
+        <link rel="stylesheet" href="bootstrap.min.css">
+        
+    </head>
+    <body>
+        <div class="paint">
+            <canvas id="myCanvas"></canvas>
+            <div id="saveArea">
+                <img id="canvasImg" />
+                <h2>Right Click to Save...</h2>
+                <button id="btnBack">Back</button>
+            </div>
+        </div>
+        <div id="tools">
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div id="btn-group" class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                            <input data-element="red" type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off">
+                            <label class="btn btn-outline-danger" for="btnradio1">Красный</label>
+
+                            <input data-element="yellow" type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked>
+                            <label class="btn btn-outline-warning" for="btnradio2">Желтый</label>
+
+                            <input data-element="blue" type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="btnradio3">Синий</label>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                            <button id="btnSave" type="button" class="btn btn-primary">1</button>
+                            <button type="button" class="btn btn-primary">2</button>
+
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Dropdown
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                    <li><a class="dropdown-item" href="#">Dropdown link</a></li>
+                                    <li><a class="dropdown-item" href="#">Dropdown link</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </body>
+</html>

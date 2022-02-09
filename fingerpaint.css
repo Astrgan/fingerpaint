@@ -1,0 +1,32 @@
+body
+{
+    margin: 0px;
+    margin: 0px;
+    font-family: Arial, sans-serif;
+
+}
+#myCanvas
+{
+    background-color: #ddd;
+    border-bottom: 1px solid black;
+    margin-bottom: 5px;
+}
+
+.paint{
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="27" height="27"><circle cx="11" cy="11" r="11" style="fill: red;"/></svg>'), auto;
+}
+
+table
+{
+    width: 100%;
+}
+
+#canvasImg
+{
+    width: 75%;
+    height: 75%;
+
+}
+
+
+
