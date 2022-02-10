@@ -9,7 +9,6 @@
         <script src="bootstrap.bundle.min.js"></script>
         <link type="text/css" rel="stylesheet" href="fingerpaint.css"/>
         <link rel="stylesheet" href="bootstrap.min.css">
-        
     </head>
     <body>
         <div class="paint">
@@ -39,15 +38,18 @@
                     <div class="col-md-5">
                         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                             <button id="btnSave" type="button" class="btn btn-primary">1</button>
-                            <button type="button" class="btn btn-primary">2</button>
+                            <button id="btnClear" type="button" class="btn btn-primary">Стереть</button>
 
                             <div class="btn-group" role="group">
-                                <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Dropdown
+                                <button id="btnGroupDrop" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Выберите
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <li><a class="dropdown-item" href="#">Dropdown link</a></li>
-                                    <li><a class="dropdown-item" href="#">Dropdown link</a></li>
+                                <ul id="dropdown-menu" class="dropdown-menu" aria-labelledby="btnGroupDrop">
+                                    <li><a class="dropdown-item" href="#">Батаенкова Камилла</a></li>
+                                    <li><a class="dropdown-item" href="#">Бежалова Оливия</a></li>
+                                    <li><a class="dropdown-item" href="#">Бирюкова Валерия</a></li>
+                                    <li><a class="dropdown-item" href="#">Бочкарев Платон</a></li>
+                                    <li><a class="dropdown-item" href="#">Володькин Алексей</a></li>
                                 </ul>
                             </div>
                         </div>

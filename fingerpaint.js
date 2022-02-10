@@ -1,8 +1,21 @@
-var drawing = false;
-var context;
+let drawing = false;
+let context, student;
+
+function drawBackground() {
+    let background = new Image();
+    background.src = "./img/duck.jpg";
+
+    background.onload = function () {
+        context.canvas.getContext("2d").drawImage(background, 0, 0);
+    }
+}
 
 window.onload=function()
 {
+    document.getElementById('btnClear').addEventListener('click', function(){
+        context.clearRect(0,0, context.canvas.width, context.canvas.height);
+        drawBackground();
+    }, false);
     
     //Back Button
     document.getElementById('btnBack').addEventListener('click', function(){
@@ -56,18 +69,20 @@ window.onload=function()
     //Style line
     context.strokeStyle = "yellow";
     context.lineJoin = "round";
-    let radPoint = 15;
+    let radPoint = 18;
     context.lineWidth = radPoint;
     
     //Hide Save Area
     document.getElementById('saveArea').style.display = "none";
+    document.getElementById('dropdown-menu').addEventListener('click', function (e) {
+        student = e.target.textContent;
+        document.getElementById('btnGroupDrop').innerText = student;
 
-    let background = new Image();
-    background.src = "./img/duck.jpg";
+    })
 
-    background.onload = function(){
-        context.canvas.getContext("2d").drawImage(background,0,0);
-    }
+
+
+    drawBackground();
 }
 
 
