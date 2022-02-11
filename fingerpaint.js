@@ -7,8 +7,10 @@ window.onload=function()
     openRequest.onupgradeneeded = function(e) {
         console.log("DB - Upgrading...");
         let thisDB = e.target.result;
-        if(!thisDB.objectStoreNames.contains("students")) {
-            thisDB.createObjectStore("students", { keyPath: "id", autoIncrement:true });
+        if (!thisDB.objectStoreNames.contains("students")) {
+            let objectStore = thisDB.createObjectStore("students", {keyPath: "id", autoIncrement: true});
+            objectStore.createIndex("name","name", {unique:false});
+            objectStore.createIndex("created","created", {unique:false});
         }
     }
     openRequest.onsuccess = function(e) {
@@ -146,6 +148,12 @@ function endProcess() {
     let transaction = db.transaction(["students"],"readwrite");
     let store = transaction.objectStore("students");
     let request = store.getAll();
+    request.onsuccess = function(e) {
+        console.log(e.target.result);
+    }
+
+    let index = store.index("name");
+    request = index.getAll(student);
     request.onsuccess = function(e) {
         console.log(e.target.result);
     }
