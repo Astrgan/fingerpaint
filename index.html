@@ -4,8 +4,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
         <title>Fingerpaint</title>
-        <script type="text/javascript" src="fingerpaint.js"></script>
+        <script src="jquery.min.js"></script>
         <script src="bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="fingerpaint.js"></script>
         <script src="FileSaver.js"></script>
         <link type="text/css" rel="stylesheet" href="fingerpaint.css"/>
         <link rel="stylesheet" href="bootstrap.min.css">
@@ -39,8 +40,8 @@
                         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                             <button id="btnSave" type="button" class="btn btn-primary">1</button>
                             <button id="btnClear" type="button" class="btn btn-primary">Стереть</button>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal">Начать</button>
-                            <button id="btnEnd" type="button" class="btn btn-primary">Закончить</button>
+                            <button id="btnBegan" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal">Начать</button>
+                            <button id="btnEnd" type="button" class="btn btn-primary" disabled>Закончить</button>
 
                             <div class="btn-group" role="group">
                                 <button id="btnGroupDrop" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

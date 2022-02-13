@@ -2,11 +2,22 @@ let drawing = false;
 let context, student, openRequest, db;
 let prevEvent, currentEvent, speed;
 let movementXP, movementYP, movementP, speedP, maxSpeedP, accelerationP, maxPositiveAccelerationP, maxNegativeAccelerationP;
+let camera_stream = null;
+let media_recorder = null;
+let blobs_recorded = [];
+let maxSpeed =0,prevSpeed=0,maxPositiveAcc=0,maxNegativeAcc=0, clientX, clientY, transaction, store, canvas, fileName;
 
-let maxSpeed =0,prevSpeed=0,maxPositiveAcc=0,maxNegativeAcc=0, clientX, clientY, transaction, store;
+async function getCameraStream() {
+    try {
+        camera_stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+    } catch (error) {
+        alert(error.message);
+    }
+}
 
 window.onload=function()
 {
+    camera_stream = getCameraStream();
     openRequest = indexedDB.open("DBStudents",3);
     openRequest.onupgradeneeded = function(e) {
         console.log("DB - Upgrading...");
@@ -27,7 +38,8 @@ window.onload=function()
     }
 
     //Size Canvas
-    context = document.getElementById('myCanvas').getContext("2d");
+    canvas = document.getElementById('myCanvas');
+    context = canvas.getContext("2d");
     context.canvas.width = window.innerWidth;
     context.canvas.height = window.innerHeight-60;
 
@@ -48,32 +60,21 @@ window.onload=function()
         document.getElementById('exampleModalLabel').innerText = student;
     });
     document.getElementById('btnClear').addEventListener('click', function(){
-        console.log("btnClear")
         context.clearRect(0,0, context.canvas.width, context.canvas.height);
         drawBackground();
     }, false);
-    
+
     //Back Button
     document.getElementById('btnBack').addEventListener('click', function(){
-            document.getElementById('myCanvas').style.display = "block";
-            document.getElementById('saveArea').style.display = "none";
-            document.getElementById('tools').style.display = "block";
-            
-        }, false);
+        canvas.style.display = "block";
+        document.getElementById('saveArea').style.display = "none";
+        document.getElementById('tools').style.display = "block";
+
+    }, false);
 
     document.getElementById('btn-group').addEventListener('click', ev => changeColor(ev), false);
     document.getElementById('btnStart').addEventListener('click', startProcess, false);
     document.getElementById('btnEnd').addEventListener('click', endProcess, false);
-    /*
-        //Save
-       /* document.getElementById('btnSave').addEventListener('click', function(){
-                document.getElementById('myCanvas').style.display = "none";
-                document.getElementById('saveArea').style.display = "block";
-                document.getElementById('tools').style.display = "none";
-
-                var dataURL = document.getElementById('myCanvas').toDataURL();
-                document.getElementById('canvasImg').src = dataURL;
-            }, false);*/
     drawBackground();
 }//onLoad
 
@@ -98,7 +99,6 @@ function changeColor(e) {
 }
 
 function drawBackground() {
-    console.log('drawBackground');
     let background = new Image();
     background.src = "./img/duck.jpg";
 
@@ -131,7 +131,6 @@ function handleMouseMove(e)
         drawing:drawing,
         mouseData:getMouseData(),
     }
-    console.log(person)
     transaction = db.transaction(["students"],"readwrite");
     store = transaction.objectStore("students");
     let request = store.add(person);
@@ -139,66 +138,83 @@ function handleMouseMove(e)
 
 function handleDown(e) {
     if (e.buttons==1){
-        drawing = !drawing;
+        drawing = true;
         context.moveTo(e.clientX, e.clientY);
         context.beginPath();
     }
 }
 
 function handleUp() {
-    console.log('handleUp');
-    drawing = !drawing;
+    drawing = false;
 }
 
 function startProcess() {
-    console.log('startProcess')
+    $('#modal').modal('hide')
     //Mouse movement
     document.onmousemove = handleMouseMove;
     document.onmousedown = handleDown;
     document.onmouseup   = handleUp;
+    document.getElementById('btnEnd').disabled = false;
+    document.getElementById('btnBegan').disabled = true;
+    startRec();
 }
 
 function endProcess() {
     document.onmousemove = null;
     document.onmousedown = null;
     document.onmouseup   = null;
-
+    fileName = student + ' ' + new Date();
+    media_recorder.stop();
     let transaction = db.transaction(["students"],"readwrite");
     let store = transaction.objectStore("students");
-    // let request = store.getAll();
-    // request.onsuccess = function(e) {
-    //     console.log(e.target.result);
-    // }
-
     let index = store.index("name");
     let request = index.getAll(student);
     request.onsuccess = function(e) {
-        // console.log(e.target.result);
         let text = [];
+        text.push('created' + ';' + 'name' + ';' + 'drawing' + ';');
+        for(let name in e.target.result[0].mouseData) {
+            text.push(name);
+            text.push(';')
+        }
+        text.push('\n')
         for (const item of e.target.result) {
-            text.push(item);
+            text.push(item.created + ';' + item.name + ';' + item.drawing + ';');
+
+            for(let name in item.mouseData) {
+                text.push(item.mouseData[name]);
+                text.push(';')
+            }
+
             text.push('\n')
         }
-        console.log(text.join(""));
-        console.log(text.join(e.target.result));
         let blob = new Blob([text.join("")], { type: "text/plain;charset=utf-8" });
-        saveAs(blob, student + new Date() +'.txt');
+        saveAs(blob, fileName +'.txt');
 
-
+        canvas.toBlob((blob) => {
+            console.log('save png')
+            saveAs(blob, fileName +".png");
+        });
+        document.getElementById('btnEnd').disabled = true;
+        document.getElementById('btnBegan').disabled = false;
     }
 }
-/*
 
 function startRec() {
     // set MIME type of recording as video/webm
     media_recorder = new MediaRecorder(camera_stream, { mimeType: 'video/webm' });
-
     // event : new recorded video blob available
     media_recorder.addEventListener('dataavailable', function(e) {
         blobs_recorded.push(e.data);
-    }
+    });
+
+    media_recorder.addEventListener('stop', function() {
+        // create local object URL from the recorded video blobs
+        let blob = new Blob(blobs_recorded, { type: 'video/webm' });
+        saveAs(blob, fileName +'.webm');
+    });
+    media_recorder.start(1000);
 }
-*/
+
 
 function calcMouseData() {
     if (prevEvent && currentEvent) {
@@ -234,6 +250,8 @@ function calcMouseData() {
 
 function getMouseData() {
     return mouseData = {
+        clientX:clientX,
+        clientY:clientY,
         movementXP:movementXP,
         movementYP:movementYP,
         movementP:movementP,
@@ -241,9 +259,7 @@ function getMouseData() {
         maxSpeedP:maxSpeedP,
         accelerationP:accelerationP,
         maxPositiveAccelerationP:maxPositiveAccelerationP,
-        maxNegativeAccelerationP:maxNegativeAccelerationP,
-        clientX:clientX,
-        clientY:clientY
+        maxNegativeAccelerationP:maxNegativeAccelerationP
     }
 }
 
