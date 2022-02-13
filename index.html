@@ -5,8 +5,8 @@
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
         <title>Fingerpaint</title>
         <script type="text/javascript" src="fingerpaint.js"></script>
-        <script type="text/javascript" src="mouseDate.js"></script>
         <script src="bootstrap.bundle.min.js"></script>
+        <script src="FileSaver.js"></script>
         <link type="text/css" rel="stylesheet" href="fingerpaint.css"/>
         <link rel="stylesheet" href="bootstrap.min.css">
     </head>
@@ -39,7 +39,7 @@
                         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                             <button id="btnSave" type="button" class="btn btn-primary">1</button>
                             <button id="btnClear" type="button" class="btn btn-primary">Стереть</button>
-                            <button id="btnStart" type="button" class="btn btn-primary">Начать</button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal">Начать</button>
                             <button id="btnEnd" type="button" class="btn btn-primary">Закончить</button>
 
                             <div class="btn-group" role="group">
@@ -58,6 +58,25 @@
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">...</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Продолжаем?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button id="btnStart" type="button" class="btn btn-primary">Подтверждаю</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
