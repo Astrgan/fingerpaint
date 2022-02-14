@@ -44,7 +44,8 @@ window.onload=function()
     context.canvas.height = window.innerHeight-60;
 
     //Style line
-    context.strokeStyle = "yellow";
+    color = "yellow";
+    context.strokeStyle = color;
     context.lineJoin = "round";
     let radPoint = 18;
     context.lineWidth = radPoint;
