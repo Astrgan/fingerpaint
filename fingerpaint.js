@@ -17,7 +17,7 @@ async function getCameraStream() {
 
 window.onload=function()
 {
-    camera_stream = getCameraStream();
+
     openRequest = indexedDB.open("DBStudents",3);
     openRequest.onupgradeneeded = function(e) {
         console.log("DB - Upgrading...");
@@ -164,6 +164,7 @@ function handleUp() {
 }
 
 function startProcess() {
+    getCameraStream().then(r => startRec());
     $('#modal').modal('hide')
     //Mouse movement
     document.onmousemove = handleMouseMove;
@@ -171,7 +172,7 @@ function startProcess() {
     document.onmouseup   = handleUp;
     document.getElementById('btnEnd').disabled = false;
     document.getElementById('btnBegan').disabled = true;
-    startRec();
+
 }
 
 function endProcess() {
@@ -180,6 +181,10 @@ function endProcess() {
     document.onmouseup   = null;
     fileName = student + ' ' + new Date();
     media_recorder.stop();
+    camera_stream.getTracks().forEach(function(track) {
+        track.stop();
+    });
+
     let transaction = db.transaction(["students"],"readwrite");
     let store = transaction.objectStore("students");
     let index = store.index("name");
