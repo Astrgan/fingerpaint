@@ -5,7 +5,7 @@ let movementXP, movementYP, movementP, speedP, maxSpeedP, accelerationP, maxPosi
 let camera_stream = null;
 let media_recorder = null;
 let blobs_recorded = [];
-let maxSpeed =0,prevSpeed=0,maxPositiveAcc=0,maxNegativeAcc=0, clientX, clientY, transaction, store, canvas, fileName;
+let maxSpeed =0,prevSpeed=0,maxPositiveAcc=0,maxNegativeAcc=0, clientX, clientY, transaction, store, canvas, fileName, color;
 
 async function getCameraStream() {
     try {
@@ -82,17 +82,20 @@ function changeColor(e) {
     switch (e.target.getAttribute('data-element')) {
         case 'red':
             console.log('red');
-            context.strokeStyle = 'red';
+            color = 'red';
+            context.strokeStyle = color;
             document.getElementById('cursor').style.backgroundColor = 'red';
             break;
         case 'yellow':
             console.log('yellow');
-            context.strokeStyle = 'yellow';
+            color = 'yellow';
+            context.strokeStyle = color;
             document.getElementById('cursor').style.backgroundColor = 'yellow';
             break;
         case 'blue':
             console.log('blue');
-            context.strokeStyle = 'blue';
+            color = 'blue';
+            context.strokeStyle = color;
             document.getElementById('cursor').style.backgroundColor = 'blue';
             break;
     }
@@ -100,22 +103,22 @@ function changeColor(e) {
 
 function drawBackground() {
     let y = 200;
-    context.fillStyle = 'red';
+
+    context.strokeStyle = 'yellow';
     context.beginPath();
-    context.ellipse(context.canvas.width/2, context.canvas.height/2+y, 300, y/2,  Math.PI, 0, 2 * Math.PI);
-    context.fill();
+    context.ellipse(context.canvas.width/2, context.canvas.height/2+50, 200, 200/2-50,  Math.PI, 0, 2 * Math.PI);
+    context.stroke();
 
-    context.fillStyle = 'blue';
+    context.strokeStyle = 'blue';
     context.beginPath();
-    context.ellipse(context.canvas.width/2, context.canvas.height/2+y-y, 200, 200/2,  Math.PI, 0, 2 * Math.PI);
-    context.fill();
+    context.ellipse(context.canvas.width/2, context.canvas.height/2+y, 300, y/2-20,  Math.PI, 0, 2 * Math.PI);
+    context.stroke();
 
-    context.fillStyle = 'green';
+    context.strokeStyle = 'red';
     context.beginPath();
-    context.ellipse(context.canvas.width/2, context.canvas.height/2-250, 100, 100/2,  Math.PI*.5, 0, 2 * Math.PI);
-    context.fill();
-
-
+    context.ellipse(context.canvas.width/2, context.canvas.height/2-110, 100, 80,  Math.PI*.5, 0, 2 * Math.PI);
+    context.stroke();
+    context.strokeStyle = color;
 }
 
 function handleMouseMove(e)
