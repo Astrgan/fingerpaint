@@ -191,8 +191,14 @@ function endProcess() {
             text.push(';')
         }
         text.push('\n')
+
+        function transformDate(created) {
+            let tzoffset = created.getTimezoneOffset() * 60000; //offset in milliseconds
+            return (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
+        }
+
         for (const item of e.target.result) {
-            text.push(item.created + ';' + item.name + ';' + item.drawing + ';');
+            text.push(transformDate(item.created) + ';' + item.name + ';' + item.drawing + ';');
 
             for(let name in item.mouseData) {
                 text.push(item.mouseData[name]);
