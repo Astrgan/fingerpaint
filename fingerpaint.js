@@ -99,12 +99,23 @@ function changeColor(e) {
 }
 
 function drawBackground() {
-    let background = new Image();
-    background.src = "./img/duck.jpg";
+    let y = 200;
+    context.fillStyle = 'red';
+    context.beginPath();
+    context.ellipse(context.canvas.width/2, context.canvas.height/2+y, 300, y/2,  Math.PI, 0, 2 * Math.PI);
+    context.fill();
 
-    background.onload = function () {
-        context.canvas.getContext("2d").drawImage(background, 0, 0);
-    }
+    context.fillStyle = 'blue';
+    context.beginPath();
+    context.ellipse(context.canvas.width/2, context.canvas.height/2+y-y, 200, 200/2,  Math.PI, 0, 2 * Math.PI);
+    context.fill();
+
+    context.fillStyle = 'green';
+    context.beginPath();
+    context.ellipse(context.canvas.width/2, context.canvas.height/2-250, 100, 100/2,  Math.PI*.5, 0, 2 * Math.PI);
+    context.fill();
+
+
 }
 
 function handleMouseMove(e)
