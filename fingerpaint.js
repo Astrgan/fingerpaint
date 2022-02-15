@@ -7,6 +7,8 @@ let media_recorder = null;
 let blobs_recorded = [];
 let maxSpeed =0,prevSpeed=0,maxPositiveAcc=0,maxNegativeAcc=0, clientX, clientY, transaction, store, canvas, fileName, color;
 
+let s = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="27" height="27"><circle cx="11" cy="11" r="11" style="fill: red;"/></svg>';
+
 async function getCameraStream() {
     try {
         camera_stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
@@ -17,7 +19,6 @@ async function getCameraStream() {
 
 window.onload=function()
 {
-
     openRequest = indexedDB.open("DBStudents",3);
     openRequest.onupgradeneeded = function(e) {
         console.log("DB - Upgrading...");
@@ -85,19 +86,25 @@ function changeColor(e) {
             console.log('red');
             color = 'red';
             context.strokeStyle = color;
-            document.getElementById('cursor').style.backgroundColor = 'red';
+            document.getElementById('paint').classList.remove("paintRed");
+            document.getElementById('paint').classList.remove("paintYellow");
+            document.getElementById('paint').classList.add("paintRed");
             break;
         case 'yellow':
             console.log('yellow');
             color = 'yellow';
             context.strokeStyle = color;
-            document.getElementById('cursor').style.backgroundColor = 'yellow';
+            document.getElementById('paint').classList.remove("paintRed");
+            document.getElementById('paint').classList.remove("paintBlue");
+            document.getElementById('paint').classList.add("paintYellow");
             break;
         case 'blue':
-            console.log('blue');
+            console.log('blue')
             color = 'blue';
             context.strokeStyle = color;
-            document.getElementById('cursor').style.backgroundColor = 'blue';
+            document.getElementById('paint').classList.remove("paintRed");
+            document.getElementById('paint').classList.remove("paintYellow");
+            document.getElementById('paint').classList.add("paintBlue");
             break;
     }
 }

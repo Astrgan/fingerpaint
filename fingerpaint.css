@@ -12,8 +12,16 @@ body
     margin-bottom: 5px;
 }
 
-.paint{
+.paintBlue{
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="27" height="27"><circle cx="11" cy="11" r="11" style="fill: red;"/></svg>'), auto;
+}
+
+.paintRed{
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="27" height="27"><circle cx="11" cy="11" r="11" style="fill: red;"/></svg>'), auto;
+}
+
+.paintYellow{
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="27" height="27"><circle cx="11" cy="11" r="11" style="fill: yellow;"/></svg>'), auto;
 }
 
 table
