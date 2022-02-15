@@ -13,7 +13,7 @@ body
 }
 
 .paintBlue{
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="27" height="27"><circle cx="11" cy="11" r="11" style="fill: red;"/></svg>'), auto;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="27" height="27"><circle cx="11" cy="11" r="11" style="fill: blue;"/></svg>'), auto;
 }
 
 .paintRed{
@@ -33,7 +33,11 @@ table
 {
     width: 75%;
     height: 75%;
+}
 
+.dropdown-menu {
+    max-height: 280px;
+    overflow-y: auto;
 }
 
 
