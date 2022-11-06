@@ -6,7 +6,7 @@ let camera_stream = null;
 let media_recorder = null;
 let blobs_recorded = [];
 let maxSpeed =0,prevSpeed=0,maxPositiveAcc=0,maxNegativeAcc=0, clientX, clientY, transaction, store, canvas, fileName, color;
-
+let b = 150;
 let s = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="27" height="27"><circle cx="11" cy="11" r="11" style="fill: red;"/></svg>';
 
 async function getCameraStream() {
@@ -48,7 +48,7 @@ window.onload=function()
     color = "yellow";
     context.strokeStyle = color;
     context.lineJoin = "round";
-    let radPoint = 18;
+    let radPoint = 30;
     context.lineWidth = radPoint;
     student = ((document.getElementById('dropdown-menu').children)[0]).children[0].innerHTML;
     document.getElementById('btnGroupDrop').innerText = student;
@@ -114,28 +114,36 @@ function drawBackground() {
 
     context.strokeStyle = 'yellow';
     context.beginPath();
-    context.ellipse(context.canvas.width/2, context.canvas.height/2+50, 200, 200/2-50,  Math.PI, 0, 2 * Math.PI);
+    context.ellipse((context.canvas.width/2)+b, context.canvas.height/2+50, 200, 200/2-50,  Math.PI, 0, 2 * Math.PI);
     context.stroke();
 
     context.strokeStyle = 'blue';
     context.beginPath();
-    context.ellipse(context.canvas.width/2, context.canvas.height/2+y, 300, y/2-20,  Math.PI, 0, 2 * Math.PI);
+    context.ellipse((context.canvas.width/2)+b, context.canvas.height/2+y, 300, y/2-20,  Math.PI, 0, 2 * Math.PI);
     context.stroke();
 
     context.strokeStyle = 'red';
     context.beginPath();
-    context.ellipse(context.canvas.width/2, context.canvas.height/2-110, 100, 80,  Math.PI*.5, 0, 2 * Math.PI);
+    context.ellipse((context.canvas.width/2)+b, context.canvas.height/2-110, 100, 80,  Math.PI*.5, 0, 2 * Math.PI);
     context.stroke();
     context.strokeStyle = color;
 }
 
 function handleMouseMove(e)
 {
+    e.preventDefault();
     // console.log(e.clientX);
     // console.log(e.clientY);
     currentEvent=e;
-    clientX = e.clientX+10;
-    clientY = e.clientY+10;
+
+    let clientX = e.clientX || e.touches[0].clientX;
+    let clientY = e.clientY || e.touches[0].clientY;
+
+    clientX = parseInt(clientX);
+    clientY = parseInt(clientY);
+
+    clientX = clientX+10;
+    clientY = clientY+10;
     if(drawing)
     {
         context.lineTo(clientX, clientY);
@@ -156,17 +164,24 @@ function handleMouseMove(e)
     transaction = db.transaction(["students"],"readwrite");
     store = transaction.objectStore("students");
     let request = store.add(person);
+    console.log("clientX: " +clientX+ "clientY" +clientY);
 }
 
 function handleDown(e) {
-    if (e.buttons==1){
+    e.preventDefault();
+    console.log(e);
+    if (true){
+        console.log("buttons==1");
         drawing = true;
-        context.moveTo(e.clientX, e.clientY);
+        const clientX = e.clientX || e.touches[0].clientX;
+        const clientY = e.clientY || e.touches[0].clientY;
+        context.moveTo(clientX, clientY);
         context.beginPath();
     }
 }
 
-function handleUp() {
+function handleUp(e) {
+    e.preventDefault();
     drawing = false;
 }
 
@@ -177,6 +192,15 @@ function startProcess() {
     document.onmousemove = handleMouseMove;
     document.onmousedown = handleDown;
     document.onmouseup   = handleUp;
+
+    // document.ontouchmove = handleMouseMove;
+    // document.ontouchstart = handleDown;
+    // document.ontouchend   = handleUp;
+
+    canvas.addEventListener('touchstart', handleDown);
+    canvas.addEventListener('touchmove', handleMouseMove);
+    canvas.addEventListener('touchend', handleUp);
+
     document.getElementById('btnEnd').disabled = false;
     document.getElementById('btnBegan').disabled = true;
 
@@ -186,6 +210,11 @@ function endProcess() {
     document.onmousemove = null;
     document.onmousedown = null;
     document.onmouseup   = null;
+
+    document.ontouchmove = null;
+    document.ontouchstart = null;
+    document.ontouchend   = null;
+
     fileName = student + ' ' + new Date();
     media_recorder.stop();
     camera_stream.getTracks().forEach(function(track) {
@@ -251,8 +280,9 @@ function startRec() {
 
 function calcMouseData() {
     if (prevEvent && currentEvent) {
-        let movementX = Math.abs(currentEvent.screenX - prevEvent.screenX);
-        let movementY = Math.abs(currentEvent.screenY - prevEvent.screenY);
+        //const clientX = currentEvent.screenX || currentEvent.touches[0].screenX;
+        let movementX = Math.abs(currentEvent.screenX || currentEvent.touches[0].screenX - prevEvent.screenX || prevEvent.touches[0].screenX);
+        let movementY = Math.abs(currentEvent.screenY || currentEvent.touches[0].screenY - prevEvent.screenY || prevEvent.touches[0].screenY);
         let movement = Math.sqrt(movementX * movementX + movementY * movementY);
 
         movementXP = movementX;
@@ -275,7 +305,7 @@ function calcMouseData() {
             maxNegativeAccelerationP = Math.round(acceleration < maxNegativeAcc ? (maxNegativeAcc = acceleration) : maxNegativeAcc);
         }
     }
-    // console.log(movementXP, movementYP, movementP, speedP, maxSpeedP, accelerationP, maxPositiveAccelerationP, maxNegativeAccelerationP)
+    //console.log(movementXP, movementYP, movementP, speedP, maxSpeedP, accelerationP, maxPositiveAccelerationP, maxNegativeAccelerationP)
     prevEvent = currentEvent;
     prevSpeed = speed;
 
