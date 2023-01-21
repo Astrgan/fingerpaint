@@ -136,8 +136,8 @@ function handleMouseMove(e)
     // console.log(e.clientY);
     currentEvent=e;
 
-    let clientX = e.clientX || e.touches[0].clientX;
-    let clientY = e.clientY || e.touches[0].clientY;
+    clientX = e.clientX || e.touches[0].clientX;
+    clientY = e.clientY || e.touches[0].clientY;
 
     clientX = parseInt(clientX);
     clientY = parseInt(clientY);
@@ -202,7 +202,11 @@ function startProcess() {
     canvas.addEventListener('touchend', handleUp);
 
     document.getElementById('btnEnd').disabled = false;
+    document.getElementById('btnEnd').classList.remove('btn-primary');
+    document.getElementById('btnEnd').classList.add('btn-danger');
     document.getElementById('btnBegan').disabled = true;
+    document.getElementById('btnGroupDrop').disabled = true;
+
 
 }
 
@@ -211,9 +215,9 @@ function endProcess() {
     document.onmousedown = null;
     document.onmouseup   = null;
 
-    document.ontouchmove = null;
-    document.ontouchstart = null;
-    document.ontouchend   = null;
+    canvas.removeEventListener('touchstart', handleDown);
+    canvas.removeEventListener('touchmove', handleMouseMove);
+    canvas.removeEventListener('touchend', handleUp);
 
     fileName = student + ' ' + new Date();
     media_recorder.stop();
@@ -258,6 +262,12 @@ function endProcess() {
         });
         document.getElementById('btnEnd').disabled = true;
         document.getElementById('btnBegan').disabled = false;
+        document.getElementById('btnGroupDrop').disabled = false;
+        
+ 
+        document.getElementById('btnEnd').classList.add('btn-primary');
+        document.getElementById('btnEnd').classList.remove('btn-danger');
+        blobs_recorded = [];
     }
 }
 
@@ -265,16 +275,19 @@ function startRec() {
     // set MIME type of recording as video/webm
     media_recorder = new MediaRecorder(camera_stream, { mimeType: 'video/webm' });
     // event : new recorded video blob available
-    media_recorder.addEventListener('dataavailable', function(e) {
-        blobs_recorded.push(e.data);
-    });
-
-    media_recorder.addEventListener('stop', function() {
-        // create local object URL from the recorded video blobs
-        let blob = new Blob(blobs_recorded, { type: 'video/webm' });
-        saveAs(blob, fileName +'.webm');
-    });
+    media_recorder.addEventListener('dataavailable', dataavailable);
+    media_recorder.addEventListener('stop', stopRec);
     media_recorder.start(1000);
+}
+
+function dataavailable(e) {
+    blobs_recorded.push(e.data);
+}
+
+function stopRec() {
+    // create local object URL from the recorded video blobs
+    let blob = new Blob(blobs_recorded, { type: 'video/webm' });
+    saveAs(blob, fileName +'.webm');
 }
 
 
